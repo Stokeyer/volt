@@ -1,7 +1,48 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Clock, Mail, Menu, Phone, X, Zap } from 'lucide-react'
+import Lenis from 'lenis'
+import 'lenis/dist/lenis.css'
+
+// Супер плавный инерционный скролл (Lenis)
+function useSmoothScroll(paused: boolean) {
+  const lenisRef = useRef<Lenis | null>(null)
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      // lerp имеет приоритет над duration: чем меньше, тем «тягучее»
+      lerp: 0.06,
+      wheelMultiplier: 1.1,
+      smoothWheel: true,
+      // Плавный скролл и на тач-устройствах
+      syncTouch: true,
+      touchMultiplier: 1.5,
+    })
+    lenisRef.current = lenis
+
+    let rafId = 0
+    const raf = (time: number) => {
+      lenis.raf(time)
+      rafId = requestAnimationFrame(raf)
+    }
+    rafId = requestAnimationFrame(raf)
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      lenis.destroy()
+      lenisRef.current = null
+    }
+  }, [])
+
+  // Останавливаем скролл под открытым мобильным меню
+  useEffect(() => {
+    if (paused) lenisRef.current?.stop()
+    else lenisRef.current?.start()
+  }, [paused])
+
+  return lenisRef
+}
 
 const NAV_LINKS = [
   { to: '/', label: 'Главная' },
@@ -11,17 +52,19 @@ const NAV_LINKS = [
   { to: '/contact', label: 'Контакты' },
 ]
 
-function ScrollToTop() {
-  const { pathname } = useLocation()
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [pathname])
-  return null
-}
-
 export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { pathname } = useLocation()
+  const lenisRef = useSmoothScroll(menuOpen)
+
+  // При смене страницы мгновенно возвращаемся наверх
+  useEffect(() => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true, force: true })
+    } else {
+      window.scrollTo(0, 0)
+    }
+  }, [pathname, lenisRef])
 
   // Закрываем меню при переходе на другую страницу
   useEffect(() => {
@@ -38,8 +81,6 @@ export default function Layout() {
 
   return (
     <>
-      <ScrollToTop />
-
       {/* Декоративные боковые рейки (видны только на широких экранах) */}
       <div className="side-rail side-rail-left" aria-hidden="true">
         <span className="rail-label">220 В · 50 Гц</span>
