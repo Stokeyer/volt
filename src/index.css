@@ -1,0 +1,132 @@
+:root {
+  /* Тёплая «домашняя» палитра */
+  --text: #5f5a52;
+  --text-soft: #8a847a;
+  --text-h: #211d17;
+  --bg: #faf8f4;
+  --bg-card: #ffffff;
+  --border: #eae4da;
+  --border-soft: #f1ece4;
+  --accent: #e08a3c; /* тёплый янтарный */
+  --accent-deep: #c9702a;
+  --accent-bg: rgba(224, 138, 60, 0.1);
+  --accent-border: rgba(224, 138, 60, 0.4);
+  --green: #5a7d5a;
+  --green-bg: rgba(90, 125, 90, 0.12);
+  --shadow-sm: rgba(60, 42, 20, 0.05) 0 2px 8px -2px;
+  --shadow:
+    rgba(60, 42, 20, 0.07) 0 16px 40px -12px,
+    rgba(60, 42, 20, 0.04) 0 4px 10px -4px;
+  --ring: 0 0 0 3px rgba(224, 138, 60, 0.22);
+  --card-sheen: rgba(255, 255, 255, 0.6);
+
+  --sans: 'Manrope', system-ui, sans-serif;
+
+  font: 17px/160% var(--sans);
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #b3aca1;
+    --text-soft: #847d71;
+    --text-h: #f2ede4;
+    --bg: #191612;
+    --bg-card: #221e19;
+    --border: #353028;
+    --border-soft: #2b2721;
+    --accent: #e8994f;
+    --accent-deep: #f0ad6b;
+    --accent-bg: rgba(232, 153, 79, 0.13);
+    --accent-border: rgba(232, 153, 79, 0.4);
+    --green: #8aab8a;
+    --green-bg: rgba(138, 171, 138, 0.14);
+    --shadow-sm: rgba(0, 0, 0, 0.3) 0 2px 8px -2px;
+    --shadow:
+      rgba(0, 0, 0, 0.5) 0 16px 40px -12px,
+      rgba(0, 0, 0, 0.3) 0 4px 10px -4px;
+    --ring: 0 0 0 3px rgba(232, 153, 79, 0.25);
+    --card-sheen: rgba(255, 255, 255, 0.045);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  /* Точечный узор по бокам от контента */
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--text-soft) 20%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+#root {
+  width: 1160px;
+  max-width: 100%;
+  margin: 0 auto;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border-inline: 1px solid var(--border);
+  @media (max-width: 1200px) {
+    border-inline: none;
+  }
+}
+
+h1,
+h2,
+h3 {
+  color: var(--text-h);
+  font-weight: 800;
+}
+
+h1 {
+  font-size: 56px;
+  line-height: 112%;
+  letter-spacing: -1.8px;
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    letter-spacing: -1px;
+  }
+}
+
+h2 {
+  font-size: 36px;
+  line-height: 122%;
+  letter-spacing: -1px;
+  @media (max-width: 640px) {
+    font-size: 27px;
+    letter-spacing: -0.6px;
+  }
+}
+
+p {
+  margin: 0;
+}
+
+::selection {
+  background: var(--accent-bg);
+  color: var(--accent-deep);
+}
+
+/* Единый фокус для клавиатурной навигации */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: 8px;
+}
