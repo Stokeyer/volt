@@ -985,8 +985,7 @@
   box-shadow: var(--ring);
 }
 
-.calc-row input[type='number'],
-.calc-tariff input {
+.calc-row input[type='number'] {
   font-size: 14px;
 }
 
@@ -1027,48 +1026,13 @@
   color: var(--text-soft);
 }
 
-.calc-tariff {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin: 28px 0;
-  flex-wrap: wrap;
-}
-.calc-tariff label {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-h);
-}
-.calc-tariff input {
-  width: 90px;
-  padding: 9px 12px;
-  border: 1px solid var(--border);
-  border-radius: 11px;
-  background: var(--bg-card);
-  color: var(--text-h);
-  font: inherit;
-  transition:
-    border-color 0.15s,
-    box-shadow 0.15s;
-}
-.calc-tariff input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: var(--ring);
-}
-.calc-tariff-hint {
-  font-size: 14px;
-  color: var(--text-soft);
-}
-
 .calc-results {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 14px;
-  margin-bottom: 32px;
+  margin: 28px 0 32px;
   @media (max-width: 720px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 

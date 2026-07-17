@@ -16,7 +16,6 @@ import {
 
 export default function CalculatorPage() {
   const [items, setItems] = useState<Appliance[]>(DEFAULT_APPLIANCES)
-  const [tariff, setTariff] = useState(6)
   const [nextId, setNextId] = useState(100)
 
   const addPreset = (p: Preset) => {
@@ -48,15 +47,14 @@ export default function CalculatorPage() {
     )
     const peakKw = items.reduce((sum, a) => sum + (a.watts * a.count) / 1000, 0)
     const monthlyKwh = dailyKwh * 30
-    const monthlyCost = monthlyKwh * tariff
     const recommended =
       PRODUCTS.find((p) => p.capacity >= dailyKwh && p.power >= peakKw * 0.7) ??
       PRODUCTS[PRODUCTS.length - 1]
     const autonomyH = Math.round(
       (recommended.capacity / Math.max(dailyKwh, 0.01)) * 24,
     )
-    return { dailyKwh, peakKw, monthlyKwh, monthlyCost, recommended, autonomyH }
-  }, [items, tariff])
+    return { dailyKwh, peakKw, monthlyKwh, recommended, autonomyH }
+  }, [items])
 
   return (
     <>
@@ -174,22 +172,7 @@ export default function CalculatorPage() {
         </div>
         </Reveal>
 
-        <Reveal index={2} className="calc-tariff">
-          <label htmlFor="tariff">Ваш тариф, ₽ за кВт·ч</label>
-          <input
-            id="tariff"
-            type="number"
-            min={0}
-            step={0.1}
-            value={tariff}
-            onChange={(e) => setTariff(Math.max(0, Number(e.target.value)))}
-          />
-          <span className="calc-tariff-hint">
-            — обычно указан в квитанции за свет
-          </span>
-        </Reveal>
-
-        <Reveal index={3} className="calc-results">
+        <Reveal index={2} className="calc-results">
           <div className="stat">
             <span className="stat-value">
               <AnimatedNumber value={stats.dailyKwh} digits={2} />
@@ -201,12 +184,6 @@ export default function CalculatorPage() {
               <AnimatedNumber value={stats.monthlyKwh} digits={0} />
             </span>
             <span className="stat-label">кВт·ч в месяц</span>
-          </div>
-          <div className="stat">
-            <span className="stat-value">
-              <AnimatedNumber value={stats.monthlyCost} digits={0} /> ₽
-            </span>
-            <span className="stat-label">платите за свет в месяц</span>
           </div>
           <div className="stat">
             <span className="stat-value">
