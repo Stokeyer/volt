@@ -72,6 +72,15 @@ body {
     transparent 1px
   );
   background-size: 22px 22px;
+  /* Нативный инерционный скролл на iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 860px) {
+  body {
+    /* Паттерн на весь viewport дорог при скролле на слабых GPU */
+    background-image: none;
+  }
 }
 
 #root {

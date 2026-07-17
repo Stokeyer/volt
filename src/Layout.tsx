@@ -5,31 +5,25 @@ import { Clock, Mail, Menu, Phone, X, Zap } from 'lucide-react'
 import Lenis from 'lenis'
 import 'lenis/dist/lenis.css'
 
-// Супер плавный инерционный скролл (Lenis)
+// Плавный инерционный скролл (Lenis) — только для мыши/трекпада
 function useSmoothScroll(paused: boolean) {
   const lenisRef = useRef<Lenis | null>(null)
 
   useEffect(() => {
+    // На тач-устройствах — только нативный скролл (Lenis + syncTouch давали рваный лаг)
+    if (window.matchMedia('(pointer: coarse)').matches) return
+
     const lenis = new Lenis({
       // lerp имеет приоритет над duration: чем меньше, тем «тягучее»
       lerp: 0.06,
       wheelMultiplier: 1.1,
       smoothWheel: true,
-      // Плавный скролл и на тач-устройствах
-      syncTouch: true,
-      touchMultiplier: 1.5,
+      syncTouch: false,
+      autoRaf: true,
     })
     lenisRef.current = lenis
 
-    let rafId = 0
-    const raf = (time: number) => {
-      lenis.raf(time)
-      rafId = requestAnimationFrame(raf)
-    }
-    rafId = requestAnimationFrame(raf)
-
     return () => {
-      cancelAnimationFrame(rafId)
       lenis.destroy()
       lenisRef.current = null
     }
